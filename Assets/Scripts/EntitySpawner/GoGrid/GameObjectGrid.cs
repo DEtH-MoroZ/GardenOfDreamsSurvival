@@ -13,16 +13,22 @@ public class GameObjectGrid //class to hold information about objects. nessesarr
     int _gridSideCellCount;
 
     private List<GameObject>[][] GameObjectGridList;
+
+    public List<GameObject>[][] GetGrid ()
+    {
+        return GameObjectGridList;
+    }
+
     public GameObjectGrid (float gridSideLength, float gridStep)
     {        
         if (gridSideLength < 0 )
         {
-            Debug.LogError("[CoinGrid] Grid Side Length must be more than zero.");
+            Debug.LogError("[GameObjectGrid] Grid Side Length must be more than zero.");
         }
         _gridSideLength = gridSideLength;
         if (gridStep < 0)
         {
-            Debug.LogError("[CoinGrid] Grid Step must be more than zero.");
+            Debug.LogError("[GameObjectGrid] Grid Step must be more than zero.");
         }
         _gridStep = gridStep;
 
@@ -40,40 +46,55 @@ public class GameObjectGrid //class to hold information about objects. nessesarr
         }
     }
 
+    public void Track(GameObject go, Vector3 prevPosition)
+    {        
+         if (GameObjectGridList == null)
+        {
+            Debug.LogWarning("[GameObjectGrid] No GameObjectGrid presented!");
+            return;
+        }
+        int prevPosX = GameObjectGridHelpers.WorldToGridIndices(prevPosition.x, _gridSideLength, _gridStep);
+        int prevPosY = GameObjectGridHelpers.WorldToGridIndices(prevPosition.y, _gridSideLength, _gridStep);
 
+        GameObjectGridList[prevPosX][prevPosY].Remove(go);
 
+        int posX = GameObjectGridHelpers.WorldToGridIndices(go.transform.position.x, _gridSideLength, _gridStep);
+        int posY = GameObjectGridHelpers.WorldToGridIndices(go.transform.position.y, _gridSideLength, _gridStep);
+
+        GameObjectGridList[posX][posY].Add(go);
+    }
 
     public void Add(GameObject go)
     {
         if (GameObjectGridList == null)
         {
-            Debug.LogWarning("[CoinGrid] No coin grid presented!");
+            Debug.LogWarning("[GameObjectGrid] No GameObjectGrid presented!");
             return;
         }
 
         int posX = GameObjectGridHelpers.WorldToGridIndices(go.transform.position.x, _gridSideLength, _gridStep);
-        int posZ = GameObjectGridHelpers.WorldToGridIndices(go.transform.position.z, _gridSideLength, _gridStep);
+        int posY = GameObjectGridHelpers.WorldToGridIndices(go.transform.position.y, _gridSideLength, _gridStep);
 
-        GameObjectGridList[posX][posZ].Add(go);
+        GameObjectGridList[posX][posY].Add(go);
     }
 
     public void Remove(GameObject go) 
     {
         if (GameObjectGridList == null)
         {
-            Debug.LogWarning("[CoinGrid] No coin grid presented!");
+            Debug.LogWarning("[GameObjectGrid] No GameObjectGrid presented!");
             return;
         }
         
 
         int posX = GameObjectGridHelpers.WorldToGridIndices(go.transform.position.x, _gridSideLength, _gridStep);
-        int posZ = GameObjectGridHelpers.WorldToGridIndices(go.transform.position.z, _gridSideLength, _gridStep);
+        int posY = GameObjectGridHelpers.WorldToGridIndices(go.transform.position.y, _gridSideLength, _gridStep);
 
         for (int a = posX - _celldeviance; a < posX + _celldeviance; a++)
         {
             if (a < 0 || a >= GameObjectGridList.Length) continue;
 
-            for (int b = posZ - _celldeviance; b < posZ + _celldeviance; b++)
+            for (int b = posY - _celldeviance; b < posY + _celldeviance; b++)
             {
                 if (b < 0 || b >= GameObjectGridList.Length) continue;
 
@@ -82,8 +103,8 @@ public class GameObjectGrid //class to hold information about objects. nessesarr
                     
                     if (GameObjectGridList[a][b][c].GetInstanceID() == go.GetInstanceID())
                     {
-                        if (a != posX ||  b != posZ)
-                        Debug.Log("[CoinGrid] Missplace removed " + go.GetInstanceID() + " " + go.transform.position + " " + posX + " " + posZ + " " + a + " " + b);
+                        if (a != posX ||  b != posY)
+                        Debug.Log("[GameObjectGrid] Missplace removed " + go.GetInstanceID() + " " + go.transform.position + " " + posX + " " + posY + " " + a + " " + b);
                         GameObjectGridList[a][b][c].SetActive(false);
                         GameObjectGridList[a][b].RemoveAt(c);
                     }
@@ -92,13 +113,14 @@ public class GameObjectGrid //class to hold information about objects. nessesarr
             }
         }        
     }
-    public GameObject FindCloses(Vector3 pos)
+
+    public GameObject FindClosets(Vector3 pos) //returns 1st closest gameobject, checks for entire space
     {
 
         int posX = GameObjectGridHelpers.WorldToGridIndices(pos.x, _gridSideLength, _gridStep);
-        int posZ = GameObjectGridHelpers.WorldToGridIndices(pos.z, _gridSideLength, _gridStep);
+        int posY = GameObjectGridHelpers.WorldToGridIndices(pos.y, _gridSideLength, _gridStep);
 
-        List<GameObject> found = GameObjectGridHelpers.FindNearestGameobjects(GameObjectGridList, posX, posZ);
+        List<GameObject> found = GameObjectGridHelpers.FindNearestGameobject(GameObjectGridList, posX, posY);
         if (found != null)
         {            
             return found[0];
@@ -108,27 +130,63 @@ public class GameObjectGrid //class to hold information about objects. nessesarr
             return null;
         }
     }
+    
+    public GameObject FindClosestByRadius(Vector3 pos, float radius)
+    {
+        int posX = GameObjectGridHelpers.WorldToGridIndices(pos.x, _gridSideLength, _gridStep);
+        int posY = GameObjectGridHelpers.WorldToGridIndices(pos.y, _gridSideLength, _gridStep);
 
+        int gridRadius = GameObjectGridHelpers.WorldToGridIndices(radius, _gridSideLength, _gridStep);
 
-    public List<GameObject> CheckProximity(float proximityRadius, float centerX, float centerZ)
+        List<GameObject> found = GameObjectGridHelpers.FindNearestInRadius(GameObjectGridList, posX, posY, gridRadius);
+        if (found != null)
+        {
+            return found[0];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public GameObject FindClosestByRadiusAndLayer(Vector3 pos, float radius, LayerMask layer)
+    {
+        int posX = GameObjectGridHelpers.WorldToGridIndices(pos.x, _gridSideLength, _gridStep);
+        int posY = GameObjectGridHelpers.WorldToGridIndices(pos.y, _gridSideLength, _gridStep);
+
+        int inGridRadius = Mathf.RoundToInt(radius / _gridStep);
+
+        GameObject found = GameObjectGridHelpers.FindNearestInRadiusAndLayer(GameObjectGridList, posX, posY, inGridRadius, layer);
+                
+        if (found != null)
+        {
+            return found;
+        }
+        else
+        {
+            return null;
+        }        
+    }
+
+    public List<GameObject> CheckProximity(float proximityRadius, float centerX, float centerY)
     {
         
         if (proximityRadius <= 0)
         {
-            Debug.LogError("[CoinGrid] Proximity Radius should be greater than zero.");
+            Debug.LogError("[GameObjectGrid] Proximity Radius should be greater than zero.");
             return null;
         }
 
 
         int indexHalfSize =Mathf.FloorToInt(proximityRadius / _gridStep);
         int indexCenterX = GameObjectGridHelpers.WorldToGridIndices(centerX, _gridSideLength, _gridStep);
-        int indexCenterZ = GameObjectGridHelpers.WorldToGridIndices(centerZ, _gridSideLength, _gridStep);
+        int indexCenterY = GameObjectGridHelpers.WorldToGridIndices(centerY, _gridSideLength, _gridStep);
                 
         List<GameObject> coinsAround = new List<GameObject>();
 
         for (int a = indexCenterX - indexHalfSize; a < indexCenterX + indexHalfSize; a++)
         {            
-            for (int b = indexCenterZ - indexHalfSize; b < indexCenterZ + indexHalfSize; b++)
+            for (int b = indexCenterY - indexHalfSize; b < indexCenterY + indexHalfSize; b++)
             {
                 if (a < 0 ||  b < 0 || a >= GameObjectGridList.Length || b >= GameObjectGridList[a].Length)
                 {

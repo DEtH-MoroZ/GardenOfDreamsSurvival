@@ -9,8 +9,8 @@ public class GenericCharacterController2D : MonoBehaviour
     public float acceleration = 10f;
     public float deceleration = 10f;
 
-    [Header("Physics")]
-    public bool useForceMovement = false;
+    //[Header("Physics")]
+    //public bool useForceMovement = false;
 
     private Vector2 _currentVelocity;
     private Rigidbody2D _rb;
@@ -28,22 +28,22 @@ public class GenericCharacterController2D : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (useForceMovement)
-        {
+       // if (useForceMovement)
+       // {
             MoveWithForce();
-        }
-        else
+       // }
+       /* else
         {
             MoveDirect();
-        }
+        }*/
     }
-
+    /*
     private void MoveDirect()
     {
         Vector2 targetVelocity = _moveInput * moveSpeed;
         _rb.velocity = targetVelocity;
     }
-
+    */
     private void MoveWithForce()
     {
         Vector2 targetVelocity = _moveInput * moveSpeed;

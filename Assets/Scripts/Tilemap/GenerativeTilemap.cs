@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -12,7 +13,7 @@ public class GenerativeTilemap : MonoBehaviour
 
     private void Start()
     {
-       TileSpawn();
+       TileSpawn().Forget();
     }
 
     async UniTaskVoid TileSpawn()

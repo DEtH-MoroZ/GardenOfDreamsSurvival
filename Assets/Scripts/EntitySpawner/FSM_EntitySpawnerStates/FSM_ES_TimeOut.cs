@@ -12,6 +12,7 @@ public class FSM_ES_TimeOut : FSMState
     private void OnEnter()
     {
         currentTimeout = Model.GetFloat("Timeout");
+        Debug.Log("[FSM_ES] Timeout is " + currentTimeout + " seconds.");
     }
 
     [Loop(0.2f)]
@@ -24,6 +25,5 @@ public class FSM_ES_TimeOut : FSMState
             Debug.Log("[FSM_ES] Timeout finished.");
             Parent.Change("FSM_ES_WaveSpawn");
         }
-        Debug.Log(currentTimeout);
     }
 }

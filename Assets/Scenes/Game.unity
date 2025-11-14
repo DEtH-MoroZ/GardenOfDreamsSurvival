@@ -242,6 +242,7 @@ GameObject:
   m_Component:
   - component: {fileID: 273352649}
   - component: {fileID: 273352648}
+  - component: {fileID: 273352650}
   m_Layer: 0
   m_Name: EntitySpawner
   m_TagString: Untagged
@@ -261,9 +262,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cb76ca20092c4c4e8b1755ecd1bee97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MobCountCurrent: 0
   MobCountInitial: 4
-  MobCountIncrease: 2
+  MobCountWaweIncrease: 2
   playerPrefab: {fileID: 5247473715400982440, guid: 6268946680a4e8043bda23660e1f0713, type: 3}
   mobPrefab: {fileID: 7200524187100818722, guid: 2b714881a64dd6149856bf7a1af22aa8, type: 3}
   Timeout: 10
@@ -282,6 +282,32 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &273352650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273352647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f16c71ab470574cbb3c2d078e94e9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalModel: 0
+  ShowGizmos: 1
+  DisplayMode: 0
+  SphereRadius: 0.5
+  ObjectColor: {r: 0, g: 1, b: 1, a: 1}
+  ArrayPositionColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  ConnectionColor: {r: 1, g: 1, b: 1, a: 1}
+  GridStartPosition: {x: -100, y: -100, z: 0}
+  CellSize: 0.25
+  ShowGrid: 0
+  MaxLabelDrawCount: 50
+  MaxDrawDistance: 1000
+  UseDistanceCulling: 1
+  timerOffest: 20
 --- !u!1 &401723143
 GameObject:
   m_ObjectHideFlags: 0
