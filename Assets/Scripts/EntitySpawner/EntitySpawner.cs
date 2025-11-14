@@ -9,18 +9,19 @@ using UnityEngine;
 public class EntitySpawner : MonoBehaviourExt //current version works in waves
 {
     private FSM _WaveSpawnerFSM;
+      
+    private GameObjectGrid _Grid;//saving reference to grid, to clean saved in model.
 
-    private GameObjectGrid _Grid;//saving reference to grid, to clean saved in model. 
-
-    private float sceneSideLength = 200f;
-    private float gridSideStep = 0.25f;
+    [Header("Grid Properties")]
+    public float sceneSideLength = 200f;
+    public float gridSideStep = 0.25f;
 
     [Header("Wave Settings")]
     public int MobCountInitial = 4;
     private int CurrentWave = 1;
     private int MobCountCurrent = 0;    
-    private int MobCountWaweCurrent = 0;
-    public int MobCountWaweIncrease = 2;
+    private int MobCountWaveCurrent = 0;
+    public int MobCountWaveIncrease = 2;
 
     [Header("Character Prefabs")]
     public Transform playerPrefab;
@@ -30,18 +31,18 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
     public float Timeout = 10;
     private float currentTimeoutCounter = 0;
 
-    [OnAwake]
-    private void TheAwake()
+    [OnStart]
+    private void TheStart()
     {
         Model.Set(nameof(sceneSideLength), sceneSideLength);
         Model.Set(nameof(gridSideStep), gridSideStep);
                 
-        MobCountWaweCurrent = MobCountInitial;
+        MobCountWaveCurrent = MobCountInitial;
 
         Model.Set(nameof(CurrentWave), CurrentWave);
         Model.Set(nameof(MobCountCurrent), MobCountCurrent);
-        Model.Set(nameof(MobCountWaweCurrent), MobCountWaweCurrent);
-        Model.Set(nameof(MobCountWaweIncrease), MobCountWaweIncrease);
+        Model.Set(nameof(MobCountWaveCurrent), MobCountWaveCurrent);
+        Model.Set(nameof(MobCountWaveIncrease), MobCountWaveIncrease);
 
         Model.Set(nameof(Timeout), Timeout);
         Model.Set(nameof(currentTimeoutCounter), currentTimeoutCounter);
@@ -52,11 +53,7 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
         _WaveSpawnerFSM.Add(new FSM_ES_WaveSpawn());
         _WaveSpawnerFSM.Add(new FSM_ES_WaitForWaveClear());
         _WaveSpawnerFSM.Add(new FSM_ES_TimeOut());
-    }
-
-    [OnStart]
-    private void TheStart()
-    {
+    
         Model.EventManager.AddAction(nameof(SpawnMob), SpawnMob);
         Model.EventManager.AddAction(nameof(SpawnPlayer), SpawnPlayer);
         _WaveSpawnerFSM.Start("FSM_ES_Initial");

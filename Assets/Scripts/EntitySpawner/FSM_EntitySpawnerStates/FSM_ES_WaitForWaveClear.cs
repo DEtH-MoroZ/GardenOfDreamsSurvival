@@ -35,7 +35,7 @@ public class FSM_ES_WaitForWaveClear : FSMState
     [Exit]
     private void OnExit()
     {
-        Model.Inc("MobCountWaweCurrent", Model.GetInt("MobCountWaweIncrease"));
+        Model.Inc("MobCountWaveCurrent", Model.GetInt("MobCountWaveIncrease"));
         Model.Inc("CurrentWave", 1);
     }
 

@@ -15,7 +15,7 @@ public class FSM_ES_TimeOut : FSMState
         Debug.Log("[FSM_ES] Timeout is " + currentTimeout + " seconds.");
     }
 
-    [Loop(0.2f)]
+    [Loop(0.1f)]
     private void TimeOut()
     {
         Model.Set("currentTimeoutCounter", (currentTimeout -= 0.2f) );
