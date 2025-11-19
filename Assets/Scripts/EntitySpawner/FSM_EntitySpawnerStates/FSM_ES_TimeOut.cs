@@ -12,13 +12,13 @@ public class FSM_ES_TimeOut : FSMState
     private void OnEnter()
     {
         currentTimeout = Model.GetFloat("Timeout");
-        Debug.Log("[FSM_ES] Timeout is " + currentTimeout + " seconds.");
+        Debug.Log($"[FSM_ES] Timeout is {currentTimeout} seconds.");
     }
 
     [Loop(0.1f)]
     private void TimeOut()
     {
-        Model.Set("currentTimeoutCounter", (currentTimeout -= 0.2f) );
+        Model.Set("currentTimeoutCounter", Mathf.Round((currentTimeout -= 0.1f)*10f)/10f );
 
         if(currentTimeout <= 0f)
         {

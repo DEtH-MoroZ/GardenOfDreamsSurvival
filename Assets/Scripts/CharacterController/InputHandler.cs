@@ -3,14 +3,15 @@ using UnityEngine;
 public class InputHandler : MonoBehaviour
 {
     private GenericCharacterController2D _controller;
-    public IInputProvider _inputProvider;
+    public IMovementInputProvider _movementInputProvider;
+
 
     void Awake()
     {
         _controller = GetComponent<GenericCharacterController2D>();
-        if (_inputProvider == null )
-        _inputProvider = GetComponent<IInputProvider>();
-        if (_inputProvider == null)
+        if (_movementInputProvider == null )
+        _movementInputProvider = GetComponent<IMovementInputProvider>();
+        if (_movementInputProvider == null)
         {
             this.enabled = false;
         }
@@ -18,6 +19,6 @@ public class InputHandler : MonoBehaviour
 
     void Update()
     {
-        _controller.SetMoveInput(_inputProvider.GetMoveInput());        
+        _controller.SetMoveInput(_movementInputProvider.GetMoveInput());        
     }
 }

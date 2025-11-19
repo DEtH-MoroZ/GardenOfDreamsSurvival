@@ -13,8 +13,8 @@ public class FSM_ES_WaveSpawn : FSMState
     private void OnEnter()
     {
         Debug.Log("[FSM_ES] Spawning new wave.");
-        Debug.Log("[FSM_ES] Current wave: " + Model.GetInt("CurrentWave"));
-        Debug.Log("[FSM_ES] Mobs to spawn: " + Model.GetInt("MobCountWaveCurrent"));        
+        Debug.Log($"[FSM_ES] Current wave: {Model.GetInt("CurrentWave")}");
+        Debug.Log($"[FSM_ES] Mobs to spawn: {Model.GetInt("MobCountWaveCurrent")}");        
     }
 
     [One(0.1f)]

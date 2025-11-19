@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//stores all item scrriptable objects all across project
+
 [CreateAssetMenu(fileName = "ItemDatabase", menuName = "Inventory/Item Database")]
 public class ItemDatabase : ScriptableObject
 {
@@ -30,7 +32,7 @@ public class ItemDatabase : ScriptableObject
         if (itemDictionary.ContainsKey(id))
             return itemDictionary[id];
 
-        Debug.LogWarning($"Item with ID {id} not found!");
+        Debug.LogWarning($"[ItemDatabase]Item with ID {id} not found!");
         return null;
     }
 

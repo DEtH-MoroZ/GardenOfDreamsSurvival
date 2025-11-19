@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 5247473715400982438}
   - component: {fileID: 5247473715400982439}
   - component: {fileID: -767052920097680323}
+  - component: {fileID: 8552412032166129031}
   m_Layer: 7
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -156,7 +157,6 @@ MonoBehaviour:
   moveSpeed: 5
   acceleration: 10
   deceleration: 10
-  useForceMovement: 1
 --- !u!114 &5247473715400982438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,8 +169,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a756b9ebad7a5c4185db94104584d2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalModel: 0
   horizontalAxis: Horizontal
   verticalAxis: Vertical
+  InventoryKeyCode: 9
 --- !u!114 &5247473715400982439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,6 +220,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   canAtack: 1
+--- !u!114 &8552412032166129031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5247473715400982446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3d612970577be5448dcf1c71d51e268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  itemDatabase: {fileID: 0}
 --- !u!1001 &5247473714637061500
 PrefabInstance:
   m_ObjectHideFlags: 0

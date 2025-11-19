@@ -27,6 +27,9 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
     public Transform playerPrefab;
     public Transform mobPrefab;
 
+    [Header("Item Prefab")]
+    public Transform itemPrefab;
+
     [Header("Timeout between waves")]
     public float Timeout = 10;
     private float currentTimeoutCounter = 0;
@@ -56,9 +59,12 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
     
         Model.EventManager.AddAction(nameof(SpawnMob), SpawnMob);
         Model.EventManager.AddAction(nameof(SpawnPlayer), SpawnPlayer);
+        Model.EventManager.AddAction<ItemInstance>(nameof(SpawnItem), SpawnItem);
+        Model.EventManager.AddAction<GameObject>(nameof(Despawn), Despawn);
+
         _WaveSpawnerFSM.Start("FSM_ES_Initial");
 
-        _Grid = Model.Get<GameObjectGrid>("GameObjectGrid");       
+        OnGameObjectGridChanged();
     }
 
     [Bind("OnGameObjectGridChanged")]
@@ -74,6 +80,8 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
     {
         Model.EventManager.RemoveAction(nameof(SpawnMob), SpawnMob);
         Model.EventManager.RemoveAction(nameof(SpawnPlayer), SpawnPlayer);
+        Model.EventManager.RemoveAction<ItemInstance>(nameof(SpawnItem), SpawnItem);
+        Model.EventManager.RemoveAction<GameObject>(nameof(Despawn), Despawn);
     }
 
     [OnUpdate]
@@ -97,6 +105,18 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
         Camera.main.transform.localPosition = Vector3.forward * -15;
         Model.Set(nameof(PlayerTransform), PlayerTransform);
     }
+
+    private void SpawnItem(ItemInstance itemInstance) {
+        Transform ItemTransform = Instantiate(itemPrefab);
+        _Grid.Add(ItemTransform.gameObject);
+        ItemTransform.GetComponent<ItemWorldRepresentation>().SetItemInstance(itemInstance);
+    }
+
+    private void Despawn(GameObject go)
+    {
+        _Grid.Remove(go);
+    }
+
     /*
     [Bind("OnMobCountCurrentChanged")]
     private void OnMobCountCurrentChanged()

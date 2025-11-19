@@ -15,5 +15,5 @@ MonoBehaviour:
   id: 3
   stackable: 1
   dropable: 1
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 359baedf1dfe03344b6967b7c5e08188, type: 3}
   HealAmmount: 25

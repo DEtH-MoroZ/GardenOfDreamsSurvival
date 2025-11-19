@@ -182,7 +182,7 @@ public class GameObjectGrid //class to hold information about objects. nessesarr
         int indexCenterX = GameObjectGridHelpers.WorldToGridIndices(centerX, _gridSideLength, _gridStep);
         int indexCenterY = GameObjectGridHelpers.WorldToGridIndices(centerY, _gridSideLength, _gridStep);
                 
-        List<GameObject> coinsAround = new List<GameObject>();
+        List<GameObject> gameObjectsAround = new List<GameObject>();
 
         for (int a = indexCenterX - indexHalfSize; a < indexCenterX + indexHalfSize; a++)
         {            
@@ -196,11 +196,50 @@ public class GameObjectGrid //class to hold information about objects. nessesarr
                 {
                     if (GameObjectGridList[a][b][c])
                     {
-                        coinsAround.Add(GameObjectGridList[a][b][c] );
+                        gameObjectsAround.Add(GameObjectGridList[a][b][c] );
                     }
                 }
             }
         }
-        return coinsAround;
+        return gameObjectsAround;
+    }
+
+    public List<GameObject> CheckProximityByLayer(float proximityRadius, float centerX, float centerY, LayerMask layer)
+    {
+
+        if (proximityRadius <= 0)
+        {
+            Debug.LogError("[GameObjectGrid] Proximity Radius should be greater than zero.");
+            return null;
+        }
+
+
+        int indexHalfSize = Mathf.FloorToInt(proximityRadius / _gridStep);
+        int indexCenterX = GameObjectGridHelpers.WorldToGridIndices(centerX, _gridSideLength, _gridStep);
+        int indexCenterY = GameObjectGridHelpers.WorldToGridIndices(centerY, _gridSideLength, _gridStep);
+
+        List<GameObject> gameObjectsAround = new List<GameObject>();
+
+        for (int a = indexCenterX - indexHalfSize; a < indexCenterX + indexHalfSize; a++)
+        {
+            for (int b = indexCenterY - indexHalfSize; b < indexCenterY + indexHalfSize; b++)
+            {
+                if (a < 0 || b < 0 || a >= GameObjectGridList.Length || b >= GameObjectGridList[a].Length)
+                {
+                    continue;
+                }
+                for (int c = 0; c < GameObjectGridList[a][b].Count; c++)
+                {
+                    if (GameObjectGridList[a][b][c])
+                    {
+                        if (LayerMaskExtensions.Contains(layer, GameObjectGridList[a][b][c]))
+                        {
+                            gameObjectsAround.Add(GameObjectGridList[a][b][c]);
+                        }
+                    }
+                }
+            }
+        }
+        return gameObjectsAround;
     }
 }

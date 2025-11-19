@@ -16,7 +16,7 @@ public class UIDisableWhenLessThenZero : MonoBehaviourExt
 
     private void OnValueToTrackChanged(float value)
     {
-        if (value < 0)
+        if (value <= 0)
         {
             gameObject.SetActive(false);
         }

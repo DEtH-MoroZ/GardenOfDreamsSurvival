@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MobInputProvider : MonoBehaviour, IInputProvider
+public class MobInputProvider : MonoBehaviour, IMovementInputProvider
 {
     [Header("AI Settings")]
     public Transform target;

@@ -1,5 +1,5 @@
 using UnityEngine;
-public interface IInputProvider
+public interface IMovementInputProvider
 {
     Vector2 GetMoveInput();
 }
