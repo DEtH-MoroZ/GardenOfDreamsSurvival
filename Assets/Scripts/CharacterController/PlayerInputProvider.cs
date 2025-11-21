@@ -30,7 +30,7 @@ public class PlayerInputProvider : MonoBehaviourExtBind, IMovementInputProvider
     public void TheUpdate()
     {
         if (Input.GetKeyUp(InventoryKeyCode)) {
-            Model.Set("IsInventoryEnabled", !Model.GetBool("IsInventoryEnabled"));
+            Model.Set("IsInventoryEnabled", !Model.GetBool("IsInventoryEnabled", false));
         }
     }
 }

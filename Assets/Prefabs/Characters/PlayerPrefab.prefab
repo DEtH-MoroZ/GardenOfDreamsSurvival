@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5247473715400982438}
   - component: {fileID: 5247473715400982439}
   - component: {fileID: -767052920097680323}
-  - component: {fileID: 8552412032166129031}
+  - component: {fileID: 714662363374261584}
   m_Layer: 7
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -214,13 +214,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterData: {fileID: 11400000, guid: 935d3140baeca0947a898f1d08b15c64, type: 2}
   currentHealth: 0
-  atackRange: 10
+  atackRange: 7
   TargetForAtack: {fileID: 0}
   enemyLayermask:
     serializedVersion: 2
     m_Bits: 256
   canAtack: 1
---- !u!114 &8552412032166129031
+--- !u!114 &714662363374261584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -229,13 +229,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5247473715400982446}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3d612970577be5448dcf1c71d51e268, type: 3}
+  m_Script: {fileID: 11500000, guid: c53a3f9e3464b894b9ee9b71d94a0d3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventorySlots: []
   itemLayer:
     serializedVersion: 2
     m_Bits: 512
-  itemDatabase: {fileID: 0}
+  ProximityRadius: 0.75
 --- !u!1001 &5247473714637061500
 PrefabInstance:
   m_ObjectHideFlags: 0

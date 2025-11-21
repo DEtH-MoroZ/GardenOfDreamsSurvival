@@ -25,13 +25,23 @@ public class ItemManager : MonoBehaviourExt //class, that drives items around
     }
 
     [OnDelay(4f)]
-    private void TestSpawnHealingItem()
+    private void TheTest()
+    {
+        for (int a = 0; a < 6; a++)
+        {
+            TestSpawnHealingItem(Random.Range(-20f, 20f), Random.Range(-20f, 20f));
+        }
+
+        Debug.Log($"Total spawned {inGameItemDatabase.Count}");
+    }
+
+    private void TestSpawnHealingItem(float x, float y)
     {        
         ItemInstance theHealingItem = new ItemInstance(theItemDatabase.GetItem(3));
 
         inGameItemDatabase.Add(theHealingItem.UniqueID, theHealingItem);
 
-        Model.EventManager.Invoke("SpawnItem", inGameItemDatabase.GetValueByKeyOrNull(theHealingItem.UniqueID)); //additional make-sure that we use databased item
+        Model.EventManager.Invoke("SpawnItem", inGameItemDatabase.GetValueByKeyOrNull(theHealingItem.UniqueID), x, y); //additional make-sure that we use databased item
     }
 }
 

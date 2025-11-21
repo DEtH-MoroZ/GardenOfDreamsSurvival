@@ -3,13 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterInventoryManager : MonoBehaviourExt
-{
-    public LayerMask itemLayer;
-
-    [SerializeField] private ItemDatabase itemDatabase;
-
-    [SerializeField] private float ProximityRadius = 0.5f;
-
+{    
     [HideInInspector]
     public List<InventorySlot> inventorySlots = new List<InventorySlot>();
 /*
@@ -22,68 +16,52 @@ public class CharacterInventoryManager : MonoBehaviourExt
 */
     public bool AddItem(ItemInstance itemInstance)
     {
-        //ItemScriptableObject item = itemDatabase.GetItem(itemID);
-        //if (item == null) return false;
-        /*
-        // Try to stack if possible
-        if (item.stackable == true)
+        if (itemInstance.data.stackable == true)
         {
             foreach (var slot in inventorySlots)
             {
-                if (slot.ItemID == itemID )
+                if (slot.itemID == itemInstance.data.id)
                 {
-                    slot.AddToStack(quantity);
+                    slot.AddToStack(itemInstance);
                     return true;
                 }
             }
         }
-        */
+
         // Add to new slot
         inventorySlots.Add(new InventorySlot(itemInstance));
-        return true;
+
+        return true; //for future situation, where inventory is full
+    }
+    public void DropItem(InventorySlot inventorySlot)
+    {        
+        Model.EventManager.Invoke("SpawnItem", inventorySlot.GetFirstItemInstance(), transform.position.x+1f, transform.position.y+1f);
+        inventorySlot.RemoveFirstItemInstance();
+        
+        if (inventorySlot.stackCount == 0)
+        {
+            inventorySlots.Remove(inventorySlot);
+        }
     }
 
-    public void UseItem(int itemID)
+    public void UseItem(ItemInstance itemInstance)
     {
+
+
+        /*
         ItemScriptableObject item = itemDatabase.GetItem(itemID);
         if (item != null)
         {
             Debug.Log("use item logic here");
             //item.Use(FindObjectOfType<Player>()); // Or pass player reference
             RemoveItem(itemID, 1);
-        }
+        }*/
     }
 
-    private void RemoveItem(int itemID, int quantity = 1)
+    private void RemoveItem(ItemInstance itemInstance, int quantity = 1)
     {
         Debug.Log("use item logic here");
         // Implementation for removing items
     }
-
-    [OnRefresh(0.1f)]
-    private void CheckProximity()
-    {
-        List<GameObject> proximityResult = Model.Get<GameObjectGrid>("GameObjectGrid").CheckProximityByLayer(ProximityRadius, transform.position.x, transform.position.y, itemLayer);
-
-        for (int a = 0; a < proximityResult.Count; a++)
-        {
-            ItemWorldRepresentation foundItem = proximityResult[a].GetComponent<ItemWorldRepresentation>();
-            AddItem(foundItem.GetItemInstance());
-            proximityResult[a].BroadcastMessage("PickUp", SendMessageOptions.DontRequireReceiver);
-            
-        }
-    }
-} 
-
-[System.Serializable]
-public class InventorySlot
-{   
-    public ItemInstance _itemInstance;
-
-    public InventorySlot(ItemInstance itemInstance)
-    {
-        _itemInstance = itemInstance;
-    }
-
-    //public void AddToStack(int amount) => Quantity += amount;
+    
 }

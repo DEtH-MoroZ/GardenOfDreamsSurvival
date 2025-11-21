@@ -114,6 +114,34 @@ public class GameObjectGrid //class to hold information about objects. nessesarr
         }        
     }
 
+    public List<GameObject> CheckGridCell(Vector2 pos, LayerMask layer)
+    {
+        int posX = GameObjectGridHelpers.WorldToGridIndices(pos.x, _gridSideLength, _gridStep);
+        int posY = GameObjectGridHelpers.WorldToGridIndices(pos.y, _gridSideLength, _gridStep);
+
+        if (posX < 0 || posX >= GameObjectGridList.Length) { Debug.Log($"[GameObjectGrid] posX = {pos.x} Out of bounds!"); return null; }
+        if (posY < 0 || posX >= GameObjectGridList[posX].Length) { Debug.Log($"[GameObjectGrid] posY = {pos.y} Out of bounds!"); return null; }
+
+        if (GameObjectGridList[posX][posY].Count == 0)
+        {
+            return null;
+        }
+        List<GameObject> found = new List<GameObject>();
+        for (int a = 0; a < GameObjectGridList[posX][posY].Count; a++)
+        {
+            if (LayerMaskExtensions.Contains(layer, GameObjectGridList[posX][posY][a]) )
+            {
+                found.Add(GameObjectGridList[posX][posY][a]);
+            }
+        }
+        if (found.Count == 0)
+        {
+            return null;
+        }
+
+        return found;
+    }
+
     public GameObject FindClosets(Vector3 pos) //returns 1st closest gameobject, checks for entire space
     {
 

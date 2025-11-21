@@ -41,7 +41,7 @@ public class CharacterBase : MonoBehaviourExt, IDamageable
     {
         if(!IsAlive) return;
         currentHealth -= damage;
-        if (currentHealth <= 0)        {
+        if (currentHealth <= 0) {
             Die();
         }        
         healthsBarUI?.OnHealthsChanged(currentHealth, MaxHeaths);

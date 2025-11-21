@@ -129,8 +129,8 @@ public static class GameObjectGridHelpers //chat gpt ftw. nothing works but it w
                     r += dr;
                     c += dc;
 
-                    if (r - startRow > radius) return null; // <------------------------------------------ this is the difference, if check exeed radius => stop execution
-                    if (r - startCol > radius) return null;
+                    if (r - startRow > radius+1) return null; // <------------------------------------------ this is the difference, if check exeed radius => stop execution
+                    if (r - startCol > radius+1) return null;
 
                     // If outside bounds, just skip counting as visited; only count valid cells
                     if (r >= 0 && r < rows && c >= 0 && c < cols)

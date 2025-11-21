@@ -3,6 +3,7 @@ using AxGrid.FSM;
 using AxGrid.Model;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(AdvancedGridGizmoDrawer))]
@@ -29,6 +30,7 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
 
     [Header("Item Prefab")]
     public Transform itemPrefab;
+    public LayerMask itemLayer;
 
     [Header("Timeout between waves")]
     public float Timeout = 10;
@@ -59,7 +61,7 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
     
         Model.EventManager.AddAction(nameof(SpawnMob), SpawnMob);
         Model.EventManager.AddAction(nameof(SpawnPlayer), SpawnPlayer);
-        Model.EventManager.AddAction<ItemInstance>(nameof(SpawnItem), SpawnItem);
+        Model.EventManager.AddAction<ItemInstance,float,float>(nameof(SpawnItem), SpawnItem);
         Model.EventManager.AddAction<GameObject>(nameof(Despawn), Despawn);
 
         _WaveSpawnerFSM.Start("FSM_ES_Initial");
@@ -80,7 +82,7 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
     {
         Model.EventManager.RemoveAction(nameof(SpawnMob), SpawnMob);
         Model.EventManager.RemoveAction(nameof(SpawnPlayer), SpawnPlayer);
-        Model.EventManager.RemoveAction<ItemInstance>(nameof(SpawnItem), SpawnItem);
+        Model.EventManager.RemoveAction<ItemInstance,float,float>(nameof(SpawnItem), SpawnItem);
         Model.EventManager.RemoveAction<GameObject>(nameof(Despawn), Despawn);
     }
 
@@ -106,10 +108,34 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
         Model.Set(nameof(PlayerTransform), PlayerTransform);
     }
 
-    private void SpawnItem(ItemInstance itemInstance) {
-        Transform ItemTransform = Instantiate(itemPrefab);
-        _Grid.Add(ItemTransform.gameObject);
-        ItemTransform.GetComponent<ItemWorldRepresentation>().SetItemInstance(itemInstance);
+    private void SpawnItem(ItemInstance itemInstance, float x, float y) {
+
+        List<GameObject> found = _Grid.CheckGridCell(new Vector2(x, y), itemLayer) ;
+
+        if (found != null) //found something
+        {
+            for (int a = 0; a < found.Count; a++)
+            {
+                if (found[a].GetComponent<ItemWorldRepresentation>().GetItemInstances().Last().data.id == itemInstance.data.id)
+                {
+                    found[a].GetComponent<ItemWorldRepresentation>().AddItemInstance(itemInstance);
+                    return;
+                }
+            }
+            //checked and nothing found
+            Transform ItemTransform = Instantiate(itemPrefab, new Vector3(x, y, 0), Quaternion.identity);
+            _Grid.Add(ItemTransform.gameObject);
+            ItemTransform.GetComponent<ItemWorldRepresentation>().AddItemInstance(itemInstance);
+            return;
+        }
+
+        else //nothing found
+        {
+            Transform ItemTransform = Instantiate(itemPrefab, new Vector3(x, y, 0), Quaternion.identity);
+            _Grid.Add(ItemTransform.gameObject);
+            ItemTransform.GetComponent<ItemWorldRepresentation>().AddItemInstance(itemInstance);
+            
+        }
     }
 
     private void Despawn(GameObject go)
