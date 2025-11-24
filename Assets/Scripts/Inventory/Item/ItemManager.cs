@@ -2,7 +2,6 @@
 using AxGrid.Base;
 using AxGrid.Model;
 using AxGrid.Utils;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +21,25 @@ public class ItemManager : MonoBehaviourExt //class, that drives items around
     private void TheStart()
     {
         theItemDatabase.Initialize();
+        Model.EventManager.AddAction<System.Guid>(nameof(ItemManager) + "_" + nameof(DestroyItem), DestroyItem);
+    }
+
+    [OnDestroy]
+    private void TheDestroy()
+    {
+        Model.EventManager.RemoveAction<System.Guid>(nameof(ItemManager) + "_" + nameof(DestroyItem), DestroyItem);
+    }
+
+    public void DestroyItem (System.Guid id)
+    {
+        if (inGameItemDatabase.ContainsKey(id))
+        {
+            inGameItemDatabase.Remove(id);
+        }
+        else
+        {
+            Debug.LogWarning($"[ItemManager] Trying to destroy non-existent item, GUID = {id}");
+        }
     }
 
     [OnDelay(4f)]
@@ -42,6 +60,46 @@ public class ItemManager : MonoBehaviourExt //class, that drives items around
         inGameItemDatabase.Add(theHealingItem.UniqueID, theHealingItem);
 
         Model.EventManager.Invoke("SpawnItem", inGameItemDatabase.GetValueByKeyOrNull(theHealingItem.UniqueID), x, y); //additional make-sure that we use databased item
+    }
+
+    [OnDelay(5f)]
+    private void TestSpawnWeapons()
+    {
+        ItemInstance theAk = new ItemInstance(theItemDatabase.GetItem(2));
+
+        inGameItemDatabase.Add(theAk.UniqueID, theAk);
+
+        Model.EventManager.Invoke("SpawnItem", inGameItemDatabase.GetValueByKeyOrNull(theAk.UniqueID), 20f, 20f);
+
+        for (int a = 0; a < 30; a++)
+        {
+            ItemInstance theAmmoForAk = new ItemInstance(theItemDatabase.GetItem(0));
+
+            inGameItemDatabase.Add(theAmmoForAk.UniqueID, theAmmoForAk);
+
+            Model.EventManager.Invoke("SpawnItem", inGameItemDatabase.GetValueByKeyOrNull(theAmmoForAk.UniqueID), 21f, 21f);
+        }
+
+        ItemInstance theMakarov = new ItemInstance(theItemDatabase.GetItem(6));
+
+        inGameItemDatabase.Add(theMakarov.UniqueID, theMakarov);
+
+        Model.EventManager.Invoke("SpawnItem", inGameItemDatabase.GetValueByKeyOrNull(theMakarov.UniqueID), -20f, -20f);
+
+        for (int a = 0; a < 30; a++)
+        {
+            ItemInstance theAmmoForMakarov = new ItemInstance(theItemDatabase.GetItem(1));
+
+            inGameItemDatabase.Add(theAmmoForMakarov.UniqueID, theAmmoForMakarov);
+
+            Model.EventManager.Invoke("SpawnItem", inGameItemDatabase.GetValueByKeyOrNull(theAmmoForMakarov.UniqueID), -21f, -21f);
+        }
+
+        ItemInstance theMachete = new ItemInstance(theItemDatabase.GetItem(5));
+
+        inGameItemDatabase.Add(theMachete.UniqueID, theMachete);
+
+        Model.EventManager.Invoke("SpawnItem", inGameItemDatabase.GetValueByKeyOrNull(theMachete.UniqueID), -20f, 0f);
     }
 }
 

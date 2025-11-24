@@ -94,7 +94,7 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
 
     private void SpawnMob()
     {        
-        Transform MobTransform = Instantiate(mobPrefab);
+        Transform MobTransform = Instantiate(mobPrefab, new Vector3(Random.Range(-20f, 20f), Random.Range(-20f, 20f), 0f), Quaternion.identity);
 
         MobTransform.GetComponent<MobInputProvider>().target = Model.Get<Transform>("PlayerTransform");
     }
@@ -103,8 +103,6 @@ public class EntitySpawner : MonoBehaviourExt //current version works in waves
     {
         Transform PlayerTransform = Instantiate(playerPrefab);
         PlayerTransform.position = Vector2.one * 10f;
-        Camera.main.transform.SetParent(PlayerTransform);
-        Camera.main.transform.localPosition = Vector3.forward * -15;
         Model.Set(nameof(PlayerTransform), PlayerTransform);
     }
 

@@ -190,6 +190,8 @@ public class BipedLocomotion2D : MonoBehaviour
 
     Vector3 GetGroundPosition(Vector3 position)
     {
+        //lol for vibecoding
+        /*
         RaycastHit hit;
         Vector3 rayStart = position + Vector3.up * 2f;
 
@@ -197,7 +199,7 @@ public class BipedLocomotion2D : MonoBehaviour
         {
             return hit.point;
         }
-
+        */
         return position;
     }
 

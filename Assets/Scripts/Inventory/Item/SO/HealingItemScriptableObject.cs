@@ -5,5 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "HealingItemData", menuName = "Game/Healing Item Data")]
 public class HealingItemScriptableObject : ItemScriptableObject
 {
-    public float HealAmmount = 25f;
+    public int HealAmmount = 25;
+
+    public override void Use(CharacterInventoryManager CIM, out bool RemoveAfterUse) // reference to the one, who use it
+    {
+        CIM.characterBase.Heal(HealAmmount);
+        Debug.Log($"Healing item is used by {CIM.gameObject.name}");
+        RemoveAfterUse = removeAfterUse;
+    }
 }
