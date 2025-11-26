@@ -15,5 +15,5 @@ MonoBehaviour:
   MaxHealth: 200
   Damage: 25
   MoveSpeed: 5
-  AttackRange: 5
-  AttackRate: 5
+  AttackRange: 1.5
+  AttackPerMinute: 60

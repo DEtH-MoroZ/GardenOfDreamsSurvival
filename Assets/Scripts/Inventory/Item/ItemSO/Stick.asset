@@ -16,12 +16,13 @@ MonoBehaviour:
   stackable: 0
   dropable: 1
   removeAfterUse: 0
+  removeAfterInteract: 0
   equippable: 1
   sprite: {fileID: 21300000, guid: 4bbbbff3b74c72d4b9e7a11b58a15431, type: 3}
   needAmmo: 1
-  Range: 1
-  RoundsPerSecond: 1
-  Damage: 25
+  Range: 3
+  RoundsPerMinute: 60
+  Damage: 40
   isAutomaic: 0
   canMoveWhileAtack: 0
   ammo: {fileID: 0}

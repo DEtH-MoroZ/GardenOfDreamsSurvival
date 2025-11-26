@@ -1,5 +1,6 @@
 using AxGrid;
 using AxGrid.Base;
+using ExpressoBits.Inventories;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,14 +11,14 @@ public class CharacterBase : MonoBehaviourExt
 {
     [SerializeField] protected CharacterData characterData;
     [SerializeField] protected int currentHealth;
+    [SerializeField] protected int atackRange;
 
     public int MaxHeaths => characterData.MaxHealth;
-
     public int Health => currentHealth;
     public bool IsAlive => currentHealth > 0;
     public bool IsValidTarget => IsAlive;
 
-    public float atackRange = 10f;
+    public float AtackRange => characterData.AttackRange;
 
     public CharacterBase TargetForAtack;
     public LayerMask enemyLayermask;
@@ -25,18 +26,20 @@ public class CharacterBase : MonoBehaviourExt
     CharacterHealthsBarUI healthsBarUI;
     CharacterDamageIndication damageIndication;
 
-    [OnAwake]
-    void TheAwake()
-    {
-        currentHealth = characterData.MaxHealth;
-    }
+    CharacterInventoryManager inventoryManager;
+
+    public ItemEquppedRepresentation equppedRepresentation;
+
+    
 
     [OnStart]
     void TheStart()
     {
+        currentHealth = characterData.MaxHealth;
         RegisterAtGamobjectGrid();
         healthsBarUI = GetComponent<CharacterHealthsBarUI>();
         damageIndication = GetComponent<CharacterDamageIndication>();
+        inventoryManager = GetComponent<CharacterInventoryManager>();
     }
 
     public void TakeDamage(int damage)
@@ -54,7 +57,16 @@ public class CharacterBase : MonoBehaviourExt
     public virtual void FindTargetAndAtack()
     {
         GameObjectGrid _Grid = Model.Get<GameObjectGrid>("GameObjectGrid");
-        GameObject tar = _Grid?.FindClosestByRadiusAndLayer(transform.position, atackRange, enemyLayermask);
+        GameObject tar;
+        if (inventoryManager.GetEquippedItem() == null)
+        {
+            tar = _Grid?.FindClosestByRadiusAndLayer(transform.position, AtackRange, enemyLayermask);
+        }
+        else
+        {
+            tar = _Grid?.FindClosestByRadiusAndLayer(transform.position, (inventoryManager.GetEquippedItem().data as WeaponScriptableObject).Range, enemyLayermask);
+        }
+
         if (tar != null)
         {
             TargetForAtack = tar.GetComponent<CharacterBase>();
@@ -70,13 +82,28 @@ public class CharacterBase : MonoBehaviourExt
     public virtual void Atack ()
     {
         if (canAtack == false) { return; }
+        
         if (TargetForAtack != null)
         {
-            //Debug.Log(TargetForAtack.name);
+            
 
             if (TargetForAtack.IsAlive == false) { TargetForAtack = null; return; }
-            TargetForAtack.TakeDamage(characterData.Damage);
-            Debug.Log(Vector3.Distance(TargetForAtack.transform.position, transform.position) + " " + atackRange);
+            
+            if (inventoryManager.GetEquippedItem() == null) { //bare hands, base damage
+                TargetForAtack.TakeDamage(characterData.Damage);
+                Debug.Log(Vector3.Distance(TargetForAtack.transform.position, transform.position) + " " + atackRange);
+            }
+            else
+            { //something equpped
+
+                if (inventoryManager.GetEquippedItem().data.Interact(inventoryManager, out bool removeAfterInteract))
+                {
+                    TargetForAtack.TakeDamage((inventoryManager.GetEquippedItem().data as WeaponScriptableObject).Damage);
+                    Debug.Log(Vector3.Distance(TargetForAtack.transform.position, transform.position) + " " + atackRange);
+                }
+                
+            }
+                
         }
     }
 
@@ -84,6 +111,7 @@ public class CharacterBase : MonoBehaviourExt
         currentHealth = Mathf.Min(currentHealth + amount, MaxHeaths);
         healthsBarUI?.OnHealthChanged(currentHealth, MaxHeaths);
     }
+
 
     public virtual void Die()
     {
@@ -114,7 +142,14 @@ public class CharacterBase : MonoBehaviourExt
     {
         Handles.color = Color.cyan;
         // Draw a wire disc facing forward (Vector3.back) in 2D space
-        Handles.DrawWireDisc(transform.position, Vector3.back, atackRange);
+        if (inventoryManager.GetEquippedItem() == null)
+        {
+            Handles.DrawWireDisc(transform.position, Vector3.back, AtackRange);
+        }
+        else
+        {
+            Handles.DrawWireDisc(transform.position, Vector3.back, (inventoryManager.GetEquippedItem().data as WeaponScriptableObject).Range);
+        }
     }
 #endif
 }

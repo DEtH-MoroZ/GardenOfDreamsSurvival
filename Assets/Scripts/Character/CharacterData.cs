@@ -7,5 +7,5 @@ public class CharacterData : ScriptableObject
     public int Damage;
     public float MoveSpeed;
     public float AttackRange;
-    public float AttackRate;
+    public int AttackPerMinute = 60;
 }

@@ -5,6 +5,8 @@ public class InventorySlot
 {
     private List<ItemInstance> _itemInstances;
 
+    private bool _isEqupped = false;
+
     public InventorySlot(ItemInstance itemInstance)
     {
         _itemInstances = new List<ItemInstance>();
@@ -24,6 +26,22 @@ public class InventorySlot
     {
         _itemInstances.Add(itemInstance);
     }
+
+    public void Equip ()
+    {
+        _isEqupped = true;
+    }
+
+    public void UnEquip ()
+    {
+        _isEqupped = false;
+    }
+
+    public bool isEqupped()
+    {
+        return _isEqupped;
+    }
+
     public int stackCount
     {
         get { return _itemInstances.Count; }
@@ -42,6 +60,11 @@ public class InventorySlot
     public override string ToString()
     {
         return $"[ItemInstance] Name: {_itemInstances[0].data.name}; Item Qantity {_itemInstances.Count};";
+    }
+
+    public string GetItemType()
+    {
+        return _itemInstances[0].data.GetType().ToString();
     }
     
 }

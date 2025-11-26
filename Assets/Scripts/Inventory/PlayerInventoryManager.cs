@@ -9,6 +9,8 @@ public class PlayerInventoryManager : CharacterInventoryManager
 
     [SerializeField] private float ProximityRadius = 0.5f;
 
+    private bool itemAdded = false;
+
     [OnStart]
     void TheStart()
     {
@@ -20,6 +22,8 @@ public class PlayerInventoryManager : CharacterInventoryManager
     {
         List<GameObject> proximityResult = Model.Get<GameObjectGrid>("GameObjectGrid").CheckProximityByLayer(ProximityRadius, transform.position.x, transform.position.y, itemLayer);
 
+        itemAdded = false;
+
         for (int a = 0; a < proximityResult.Count; a++)
         {
             ItemWorldRepresentation foundItems = proximityResult[a].GetComponent<ItemWorldRepresentation>();
@@ -27,10 +31,38 @@ public class PlayerInventoryManager : CharacterInventoryManager
             {
                 if (AddItem(foundItems.GetItemInstances()[b]))
                 {
-                    Model.Set("InventoryDirty", true); //needed to mark inventory ui for update                    
+                     itemAdded = true;
                 }
             }
             foundItems.PickUp();
         }
+        if (itemAdded == true)
+        {
+            Model.Set("InventoryDirty", true);
+        }
+    }
+
+    public override void UseItem(InventorySlot inventorySlot)
+    {
+        base.UseItem(inventorySlot);
+
+        Model.Set("InventoryDirty", true);
+    }
+
+    public override void DropItem(InventorySlot inventorySlot)
+    {
+        base.DropItem(inventorySlot);
+
+        Model.Set("InventoryDirty", true);
+    }
+
+    public override bool InteractWithItem(InventorySlot inventorySlot)
+    {
+        bool boolToReturn = base.InteractWithItem(inventorySlot);
+        if (boolToReturn == true)
+        {
+            Model.Set("InventoryDirty", true);
+        }
+        return boolToReturn;
     }
 }

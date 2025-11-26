@@ -18,6 +18,9 @@ public class InventoryCell : MonoBehaviourExt
     public Button dropButton;
     public Button interactionBackgrowndButton;
 
+    [Header("Indication")]
+    public RectTransform equppedIndicator;
+
     InventorySlot _InventorySlot;
 
     [OnStart]
@@ -43,6 +46,11 @@ public class InventoryCell : MonoBehaviourExt
         {
             text.text = _InventorySlot.GetFirstItemInstance().data.name + " " + _InventorySlot.stackCount;
         }
+
+        if (inventorySlot.isEqupped() == true)
+        {
+            equppedIndicator.gameObject.SetActive(true);
+        }
     }
 
 
@@ -58,7 +66,7 @@ public class InventoryCell : MonoBehaviourExt
 
     private void Use () {
         Debug.Log($"[Inventory UI] Use item: GUID: {_InventorySlot.GetFirstItemInstance().UniqueID.ToString()}; Item Type: {_InventorySlot.GetFirstItemInstance().data.GetType().ToString()}; Item ID: {_InventorySlot.GetFirstItemInstance().data.id}");
-        Model.Get<PlayerInventoryManager>("PlayerInventory").UseItem(_InventorySlot);
+        Model.Get<PlayerInventoryManager>("PlayerInventory").UseItem(_InventorySlot);        
     }
 
     private void Drop () {

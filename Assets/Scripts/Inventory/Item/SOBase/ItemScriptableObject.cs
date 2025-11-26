@@ -9,6 +9,7 @@ public class ItemScriptableObject : ScriptableObject // Base use logic, override
     public bool stackable = false;
     public bool dropable = false;
     public bool removeAfterUse = false;
+    public bool removeAfterInteract = false;
     public bool equippable = false;
 
     public Sprite sprite;
@@ -21,14 +22,19 @@ public class ItemScriptableObject : ScriptableObject // Base use logic, override
     }
 
     public virtual void Drop(CharacterInventoryManager CIM)
-    {
-        
+    {        
         Debug.Log($"Droping {this.name} by {CIM.gameObject.name}");
     }
 
     public virtual void PickUp(CharacterInventoryManager CIM)
-    {
-        
+    {        
         Debug.Log($"Picking up {this.name} by {CIM.gameObject.name}");
+    }
+
+    public virtual bool Interact(CharacterInventoryManager CIM, out bool removeAfterInteraction) 
+    {
+        Debug.Log($"Interacting with {this.name} by {CIM.gameObject.name}");
+        removeAfterInteraction = removeAfterInteract;
+        return true;        
     }
 }

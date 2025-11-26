@@ -6,5 +6,11 @@ using UnityEngine;
 
 public class CharacterMobBase : CharacterBase
 {
-    
+
+    public override void Die()
+    {
+        Debug.Log("[Character Mob Base] Mob died.");
+        Model.Dec("MobCountCurrent", 1);
+        gameObject.SetActive(false);
+    }
 }
