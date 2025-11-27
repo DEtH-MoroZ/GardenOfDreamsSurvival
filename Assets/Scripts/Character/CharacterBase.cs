@@ -28,10 +28,6 @@ public class CharacterBase : MonoBehaviourExt
 
     CharacterInventoryManager inventoryManager;
 
-    public ItemEquppedRepresentation equppedRepresentation;
-
-    
-
     [OnStart]
     void TheStart()
     {
@@ -117,8 +113,8 @@ public class CharacterBase : MonoBehaviourExt
     {
         //death logic, despawn should be after timer.
         //OnDespawned?.Invoke(this);
-        Debug.Log("die");
-        Model.Dec("MobCountCurrent", 1);
+        
+        gameObject.BroadcastMessage("OnDeath", SendMessageOptions.DontRequireReceiver);
         gameObject.SetActive(false);
     }
 

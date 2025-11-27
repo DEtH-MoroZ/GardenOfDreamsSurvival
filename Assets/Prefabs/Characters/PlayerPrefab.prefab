@@ -308,7 +308,6 @@ MonoBehaviour:
   enemyLayermask:
     serializedVersion: 2
     m_Bits: 256
-  equppedRepresentation: {fileID: 4654421285609941553}
   canAtack: 1
   Crosshair: {fileID: 6203007115879876001}
 --- !u!114 &714662363374261584
@@ -325,6 +324,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventorySlots: []
   characterBase: {fileID: 0}
+  equppedRepresentation: {fileID: 4654421285609941553}
   itemLayer:
     serializedVersion: 2
     m_Bits: 512

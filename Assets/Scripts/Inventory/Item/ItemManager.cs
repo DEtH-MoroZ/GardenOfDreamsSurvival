@@ -16,21 +16,23 @@ public class ItemManager : MonoBehaviourExt //class, that drives items around
 {
     public ItemDatabase theItemDatabase; //holds scriptable objects, each is uniqe
     public Dictionary<System.Guid, ItemInstance> inGameItemDatabase = new Dictionary<System.Guid, ItemInstance>(); //guid and class instance, that holds item info representation
-    
+
     [OnStart]
     private void TheStart()
     {
         theItemDatabase.Initialize();
         Model.EventManager.AddAction<System.Guid>(nameof(ItemManager) + "_" + nameof(DestroyItem), DestroyItem);
+        Model.EventManager.AddAction<MobInventoryManager>(nameof(ItemManager) + "_" + nameof(RequestItemSpawnForMobs), RequestItemSpawnForMobs);
     }
 
     [OnDestroy]
     private void TheDestroy()
     {
         Model.EventManager.RemoveAction<System.Guid>(nameof(ItemManager) + "_" + nameof(DestroyItem), DestroyItem);
+        Model.EventManager.RemoveAction<MobInventoryManager>(nameof(ItemManager) + "_" + nameof(RequestItemSpawnForMobs), RequestItemSpawnForMobs);
     }
 
-    public void DestroyItem (System.Guid id)
+    public void DestroyItem(System.Guid id)
     {
         if (inGameItemDatabase.ContainsKey(id))
         {
@@ -54,7 +56,7 @@ public class ItemManager : MonoBehaviourExt //class, that drives items around
     }
 
     private void TestSpawnHealingItem(float x, float y)
-    {        
+    {
         ItemInstance theHealingItem = new ItemInstance(theItemDatabase.GetItem(3));
 
         inGameItemDatabase.Add(theHealingItem.UniqueID, theHealingItem);
@@ -101,6 +103,31 @@ public class ItemManager : MonoBehaviourExt //class, that drives items around
 
         Model.EventManager.Invoke("SpawnItem", inGameItemDatabase.GetValueByKeyOrNull(theMachete.UniqueID), -20f, 0f);
     }
+
+
+    private int itemRequestIteration = 0; // 0 healthpack, 1 ammo for makarov, 2 ammo for ak
+    private void RequestItemSpawnForMobs(MobInventoryManager CIM)
+    {
+        switch (itemRequestIteration%3)
+        {
+            case 0: SpawnItemIntoCharacter(CIM, 1, 3); break;
+            case 1: SpawnItemIntoCharacter(CIM, 15, 1); break;
+            case 2: SpawnItemIntoCharacter(CIM, 30, 0); break;
+            default: break;
+        }
+        itemRequestIteration++;
+    }
+    
+    private void SpawnItemIntoCharacter(CharacterInventoryManager CIM, int itemCount, int id)
+    {
+        for (int a = 0; a < itemCount; a++)
+        {
+            ItemInstance theItem = new ItemInstance(theItemDatabase.GetItem(id));
+            inGameItemDatabase.Add(theItem.UniqueID, theItem);
+            CIM.AddItem(theItem);
+        }
+    }
+
 }
 
 

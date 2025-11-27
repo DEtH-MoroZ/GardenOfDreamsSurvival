@@ -1,0 +1,25 @@
+fsm for mobs - 2 diferent behaviors
+idle, wait for character - move to target - stop - atack target - if target moves away - move to target
+instantly charge to target - move into approximation point of target - if in range - instant atack - if targets move away - move into approximation of target
+
+save game 
+characters and items
+
+joystick and shoot button
+
+main menu?
+
+tweak camera a little
+
+-----------------------------
+remove wave spawner to diferent place
+check logic between use and equip => for consumables use == equip
+move logic of aiming and shooting into weapons
+stack dropping
+regenerate for inventory
+background for inventory button disable?
+pooling for items and monsters
+
+
+declarative?
+ecs/dots?

@@ -11,6 +11,7 @@ public class CharacterMobBase : CharacterBase
     {
         Debug.Log("[Character Mob Base] Mob died.");
         Model.Dec("MobCountCurrent", 1);
+        gameObject.BroadcastMessage("OnDeath", SendMessageOptions.DontRequireReceiver);
         gameObject.SetActive(false);
     }
 }

@@ -14,6 +14,8 @@ public class CharacterInventoryManager : MonoBehaviourExt
 
     private ItemInstance equppedItem;
 
+    public ItemEquppedRepresentation equppedRepresentation;
+
     [OnAwake]
     void TheAwake()
     {
@@ -45,7 +47,6 @@ public class CharacterInventoryManager : MonoBehaviourExt
         {
             equppedItem = null;
             inventorySlot.UnEquip();
-            equppedItem = null;
         }
 
         Model.EventManager.Invoke("SpawnItem", inventorySlot.GetFirstItemInstance(), transform.position.x+1f, transform.position.y+1f);
@@ -80,13 +81,14 @@ public class CharacterInventoryManager : MonoBehaviourExt
                 inventorySlots[a].UnEquip();
             }
             equppedItem = inventorySlot.GetFirstItemInstance();
+            equppedRepresentation.SetItem(equppedItem);
             inventorySlot.Equip();
             Debug.Log($"[InventoryManager] Item equpped: id = {inventorySlot.itemID}; type = {inventorySlot.GetItemType()}");
 
             return;
         }        
     }
-
+    
     public virtual bool InteractWithItem(InventorySlot inventorySlot)
     {
         inventorySlot.GetFirstItemInstance().data.Interact(this, out bool removeAfterInteract);
@@ -101,6 +103,8 @@ public class CharacterInventoryManager : MonoBehaviourExt
         }
         else return false;
     }
+
+    
 
     public InventorySlot FindItemByType (ItemScriptableObject itemSO)
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class InventorySlot
 {
-    private List<ItemInstance> _itemInstances;
+    public List<ItemInstance> _itemInstances;
 
     private bool _isEqupped = false;
 

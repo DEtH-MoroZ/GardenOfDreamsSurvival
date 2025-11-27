@@ -65,21 +65,14 @@ public class SmoothFollowCamera2D : MonoBehaviour
         float distance = Vector3.Distance(target.position, targetToAim.position);
 
         // Adjust zoom based on screen aspect ratio
+        /*
         float requiredZoom = (distance + zoomPadding) / (2f * cam.aspect);
+        Debug.Log(requiredZoom);
+        return Mathf.Clamp(minZoom, minZoom, maxZoom);
+        */
+        float requiredZoom = distance;
 
-        return Mathf.Clamp(requiredZoom, minZoom, maxZoom);
-    }
+        return Mathf.Clamp(requiredZoom,minZoom, maxZoom);
 
-    // Optional: Visualize camera bounds in Scene view
-    void OnDrawGizmosSelected()
-    {
-        if (cam == null) return;
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(transform.position, new Vector3(
-            cam.orthographicSize * 2 * cam.aspect,
-            cam.orthographicSize * 2,
-            0
-        ));
     }
 }

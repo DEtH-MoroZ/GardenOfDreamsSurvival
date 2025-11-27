@@ -1493,7 +1493,7 @@ MonoBehaviour:
   targetToAim: {fileID: 0}
   smoothTime: 0.3
   minZoom: 7
-  maxZoom: 15
+  maxZoom: 12
   zoomPadding: 2
 --- !u!1 &2090490440
 GameObject:
