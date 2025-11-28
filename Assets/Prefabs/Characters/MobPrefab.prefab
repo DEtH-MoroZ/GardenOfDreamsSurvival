@@ -1193,6 +1193,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   canAtack: 1
+  idleBehavior: {fileID: 11400000, guid: ead94908abc64d44a98a6067fc77e18f, type: 2}
+  chargeBehavior: {fileID: 11400000, guid: ca7c8475f8e1c6a48b3da3947bfc754c, type: 2}
+  atackBehavior: {fileID: 11400000, guid: fe4fe91bdfe8a724e8b46639374c91e1, type: 2}
 --- !u!114 &-4109247367915052060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1207,6 +1210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventorySlots: []
   characterBase: {fileID: 0}
+  equppedRepresentation: {fileID: 0}
 --- !u!114 &7504881726897097378
 MonoBehaviour:
   m_ObjectHideFlags: 0

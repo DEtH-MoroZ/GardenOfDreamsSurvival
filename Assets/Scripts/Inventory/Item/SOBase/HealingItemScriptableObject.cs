@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "HealingItemData", menuName = "Game/Healing Item Data")]
+[CreateAssetMenu(fileName = "HealingItemData", menuName = "Game/Inventory/Healing Item Data")]
 public class HealingItemScriptableObject : ItemScriptableObject
 {
     public int HealAmmount = 25;

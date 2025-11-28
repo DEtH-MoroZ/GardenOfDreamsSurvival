@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "WeaponData", menuName = "Game/Weapon Item Data")]
+[CreateAssetMenu(fileName = "WeaponData", menuName = "Game/Inventory/Weapon Item Data")]
 public class WeaponScriptableObject : ItemScriptableObject
 {
     public bool needAmmo = true;

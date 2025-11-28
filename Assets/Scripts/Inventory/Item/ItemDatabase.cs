@@ -3,7 +3,7 @@ using UnityEngine;
 
 //stores all item scrriptable objects all across project
 
-[CreateAssetMenu(fileName = "ItemDatabase", menuName = "Inventory/Item Database")]
+[CreateAssetMenu(fileName = "ItemDatabase", menuName = "Game/Inventory/Item Database")]
 public class ItemDatabase : ScriptableObject
 {
     public ItemScriptableObject[] allItems;

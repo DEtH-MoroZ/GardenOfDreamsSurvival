@@ -28,7 +28,7 @@ public class CharacterBase : MonoBehaviourExt
 
     CharacterInventoryManager inventoryManager;
 
-    [OnStart]
+    [OnStart(1)]
     void TheStart()
     {
         currentHealth = characterData.MaxHealth;

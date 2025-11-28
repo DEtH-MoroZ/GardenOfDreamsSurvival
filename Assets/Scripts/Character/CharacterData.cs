@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CharacterData", menuName = "Game/Character Data")]
+[CreateAssetMenu(fileName = "CharacterData", menuName = "Game/Character/Character Data")]
 public class CharacterData : ScriptableObject
 {
     public int MaxHealth;
